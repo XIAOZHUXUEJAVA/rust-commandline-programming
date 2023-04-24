@@ -44,7 +44,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "echo"
+name = "echor"
 version = "0.1.0"
 dependencies = [
  "clap",

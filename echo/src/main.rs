@@ -1,15 +1,15 @@
 use clap::{App, Arg};
-use std::fs::File;
+use std::fs::OpenOptions;
 use std::io::Write;
-fn main() {
-    let matches = App::new("echo")
+fn main() -> Result<(), std::io::Error> {
+    let matches = App::new("echor")
         .version("0.1.0") // cargo run -- --version or cargo run -- -V
         .author("xiaozhu xiaozhuzhulzq@163.com")
         .about("Rust echo")
         .arg(Arg::with_name("string").multiple(true).required(true))
         .arg(
             Arg::with_name("file")
-                .short(">")
+                .short("f")
                 .long("out_put")
                 .takes_value(true),
         )
@@ -30,10 +30,13 @@ fn main() {
     // 参数文件不存在时，新建文件并新添一行 ， 存在， 新添一行 而不是 覆盖
     match matches.value_of("file") {
         Some(filename) => {
-            println!("{}", filename);
-            let mut file = File::create(filename).expect("unable to create file");
-            file.write_all(text.as_bytes())
-                .expect("unable to write data to file");
+            let mut file = OpenOptions::new()
+                .write(true)
+                .append(true)
+                .create(true)
+                .open(filename)?;
+            writeln!(file, "{}", text)?;
+            
         }
         None => {
             if omit_newline {
@@ -43,4 +46,5 @@ fn main() {
             }
         }
     }
+    Ok(())
 }
