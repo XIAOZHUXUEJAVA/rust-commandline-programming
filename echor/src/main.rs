@@ -10,13 +10,6 @@ fn main() {
         .version("0.1.0") // cargo run -- --version or cargo run -- -V
         .author("xiaozhu xiaozhuzhulzq@163.com")
         .about("Rust echo")
-        // .arg(
-        //     Arg::with_name("output")
-        //     .short("o")
-        //     .long("output")
-        //     .takes_value(true)
-        //     .help("Output file")
-        // )
         .arg(
             Arg::with_name("text") // 参数的名称, 此参数用于输入文本，暂时还没有实现
                 .value_name("TEXT") // 参数值的名称  <TEXT>...    Input text
@@ -37,6 +30,8 @@ fn main() {
     let text = matches.values_of_lossy("text").unwrap();
     let omit_newline = matches.is_present("omit_newline");
     print!("{}{}", text.join(" "), if omit_newline { "" } else { "\n" });
+
+ 
 }
 
 #[cfg(test)]
