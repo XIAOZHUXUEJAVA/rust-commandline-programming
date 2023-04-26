@@ -1,6 +1,6 @@
-use std::fs;
+use std::fs; // 提供文件系统相关的操作
 
-use assert_cmd::Command;
+use assert_cmd::Command; // 命令行输出的测试
 
 use predicates::prelude::*;
 
