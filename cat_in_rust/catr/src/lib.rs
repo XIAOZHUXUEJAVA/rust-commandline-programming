@@ -42,23 +42,31 @@ pub fn get_args() -> MyResult<Config> {
         )
         .get_matches();
     Ok(Config {
-        files: matches.values_of_lossy("files").unwrap(),
+        files: matches.values_of_lossy("files").unwrap(), // values_of_lossy返回的是Option<Vec<String>> , unwrap 获取
         number_lines: matches.is_present("number"),
         number_nonblank_lines: matches.is_present("number_nonblank"),
     })
 }
-
 pub fn run(config: Config) -> MyResult<()> {
     for filename in config.files {
         match open(&filename) {
             Err(e) => eprintln!("{}: {}", filename, e),
             Ok(file) => {
-                if config.number_lines {
-                    println!("number_lines");
-                } else if config.number_nonblank_lines {
-                    println!("number_nonblank_lines")
-                } else {
-                    println!("lines")
+                let mut last_num = 0;
+                for (line_num, line) in file.lines().enumerate() {
+                    let line = line?; // 提取Result中的String
+                    if config.number_lines {
+                        println!("{:>6}\t{}", line_num + 1, line);
+                    } else if config.number_nonblank_lines {
+                        if !line.is_empty() {
+                            last_num += 1;
+                            println!("{:>6}\t{}", last_num, line);
+                        } else {
+                            println!();
+                        }
+                    } else {
+                        println!("{}", line);
+                    }
                 }
             }
         }
@@ -66,9 +74,12 @@ pub fn run(config: Config) -> MyResult<()> {
     Ok(())
 }
 
+
+
 fn open(filename: &str) -> MyResult<Box<dyn BufRead>> {
     match filename {
         "-" => Ok(Box::new(BufReader::new(io::stdin()))), // input
+        // _相当于`default`, 如果不匹配到`-`, 则匹配到_
         _ => Ok(Box::new(BufReader::new(File::open(filename)?))), // read file
     }
 }
