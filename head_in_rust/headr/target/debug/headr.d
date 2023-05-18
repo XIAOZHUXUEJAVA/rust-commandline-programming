@@ -1,0 +1,1 @@
+/root/repos/rust_projects/rust-commandline-programming/head_in_rust/headr/target/debug/headr: /root/repos/rust_projects/rust-commandline-programming/head_in_rust/headr/src/lib.rs /root/repos/rust_projects/rust-commandline-programming/head_in_rust/headr/src/main.rs
