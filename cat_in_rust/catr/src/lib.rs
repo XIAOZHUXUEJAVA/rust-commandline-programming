@@ -74,12 +74,10 @@ pub fn run(config: Config) -> MyResult<()> {
     Ok(())
 }
 
-
-
 fn open(filename: &str) -> MyResult<Box<dyn BufRead>> {
     match filename {
         "-" => Ok(Box::new(BufReader::new(io::stdin()))), // input
-        // _相当于`default`, 如果不匹配到`-`, 则匹配到_
-        _ => Ok(Box::new(BufReader::new(File::open(filename)?))), // read file
+        // _相当于`default`, 如果不匹配到`-`, 打开指定的文件
+        _ => Ok(Box::new(BufReader::new(File::open(filename)?))), // read file File::open(filename) 可能是一个失败的操作, ? 用于处理错误
     }
 }
